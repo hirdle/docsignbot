@@ -4,7 +4,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Устанавливаем Python, LibreOffice и все необходимые зависимости
 RUN apt-get update && apt-get install -y \
-    software-properties-common \
     python3 \
     python3-pip \
     libreoffice \
