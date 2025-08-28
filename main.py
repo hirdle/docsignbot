@@ -3,7 +3,7 @@ from handlers import Handlers
 import os
 
 # Инициализация бота
-bot = TeleBot(os.environ('TOKEN'))
+bot = TeleBot(os.getenv('TOKEN'))
 handlers = Handlers(bot)
 
 """Регистрация обработчиков"""
