@@ -1,6 +1,9 @@
-FROM python:3.11-slim
+FROM ubuntu:22.04
 
+# Обновляем систему и ставим Python + LibreOffice + зависимости
 RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
     libreoffice \
     libreoffice-writer \
     libreoffice-calc \
@@ -18,8 +21,13 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Ставим Python-пакеты
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Копируем проект
 COPY . .
-CMD ["python", "main.py"]
+
+# Запуск приложения
+CMD ["python3", "main.py"]
