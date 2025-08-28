@@ -1,14 +1,7 @@
-FROM ubuntu:22.04
+FROM python:3.11-slim
 
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Устанавливаем Python, LibreOffice и все необходимые зависимости
 RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
     libreoffice \
-    libreoffice-common \
-    libreoffice-core \
     libreoffice-writer \
     libreoffice-calc \
     libreoffice-impress \
@@ -25,20 +18,8 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Делаем alias, чтобы точно работала команда libreoffice
-RUN ln -s /usr/bin/libreoffice7.3 /usr/bin/libreoffice || true
-
-# Проверяем бинарник
-RUN libreoffice --version || echo "LibreOffice binary is ready"
-
 WORKDIR /app
-
-# Ставим зависимости Python
 COPY requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
-
-# Копируем проект
+RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-
-# Запуск приложения
-CMD ["python3", "main.py"]
+CMD ["python", "main.py"]
