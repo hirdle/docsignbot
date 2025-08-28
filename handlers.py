@@ -1,7 +1,7 @@
 from telebot import types
 import os
 from config import STATES, SUPPORTED_FORMATS
-from keyboards import get_main_keyboard
+# from keyboards import get_main_keyboard
 from operations import FileProcessor
 
 class Handlers:
@@ -11,37 +11,54 @@ class Handlers:
 
     def handle_start(self, message):
         """Приветственное сообщение."""
-        self.bot.reply_to(
-            message,
-            "Это бот для создания водяных знаков.\n"
-            "Выберите действие ниже ",
-            reply_markup=get_main_keyboard()
+        self.bot.send_message(
+            message.chat.id,
+            """
+           📌 Добро пожаловать в бот для создания водяных знаков!
+
+           
+ 🛠️ Как использовать:
+ 1. Отправьте файл
+ 2. Введите текст водяного знака
+ 3. Получите документ с водяным знаком
+
+ 📋 Поддерживаемые форматы:
+ • PDF
+ • DOC
+ • DOCX
+
+ 📒 Команды:
+ /start - Показать это сообщение
+ /help - Справка по использованию
+
+ 
+Отправьте файл для начала работы!
+
+            """
         )
 
     def handle_help(self, message):
         """Показывает справку."""
         help_text = """
-<b>Как использовать бота:</b>
-1. Нажмите <b>"Подписать документ"</b>
-2. Отправьте файл <b>(PDF, DOC или DOCX)</b>
-3. Отправьте текст для создания водяного знака \n
-(если несколько, то каждый с новой строки)
+📝 <b>Как использовать бота:</b>
+
+    1. Введите /start
+    2. Отправьте файл <b>(PDF, DOC или DOCX)</b>    
+    3. Отправьте текст для создания водяного знака
+    <b>(если нужно несколько, то каждый с новой строки)</b>
+
 4. Получите готовый(е) файл(ы)
 
-<b>Поддерживаемые форматы:</b>
-- PDF
-- DOC
-- DOCX
+📂 <b>Поддерживаемые форматы:</b>
+    - PDF
+    - DOC
+    - DOCX
 """
         self.bot.send_message(message.chat.id, help_text, parse_mode="HTML")
 
     def handle_create_pdf(self, message):
         """Начинает процесс создания PDF"""
         self.user_states[message.chat.id] = {"state": STATES["WAITING_FOR_FILE"]}
-        self.bot.send_message(
-            message.chat.id,
-            "Отправьте файл (PDF, DOC или DOCX):"
-        )
 
     def process_file_step(self, message):
         """Обрабатывает загруженный файл"""
@@ -110,9 +127,9 @@ class Handlers:
                     has_errors = True
             
             if not has_errors:
-                self.bot.send_message(chat_id, "✅ Готово", reply_markup=get_main_keyboard())
+                self.bot.edit_message_text(chat_id = message.chat.id, message_id = message.message_id+1, text = '✅ Готово!')
             else:
-                self.bot.send_message(chat_id, "❌ Что-то пошло не так", reply_markup=get_main_keyboard())
+                self.bot.send_message(chat_id, "❌ Что-то пошло не так.")
                 
         except Exception as e:
             self.bot.send_message(chat_id, f"{str(e)}")

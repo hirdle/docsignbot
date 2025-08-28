@@ -1,9 +1,10 @@
 from telebot import TeleBot
 from handlers import Handlers
 import os
+from config_secrets import TOKEN
 
 # Инициализация бота
-bot = TeleBot(os.getenv('TOKEN'))
+bot = TeleBot(TOKEN)
 handlers = Handlers(bot)
 
 """Регистрация обработчиков"""
@@ -11,12 +12,6 @@ handlers = Handlers(bot)
 def handle_commands(message):
     if message.text == '/start':
         handlers.handle_start(message)
-    else:
-        handlers.handle_help(message)
-
-@bot.message_handler(func=lambda m: m.text in ["Подписать документ", "Помощь"])
-def handle_buttons(message):
-    if message.text == "Подписать документ":
         handlers.handle_create_pdf(message)
     else:
         handlers.handle_help(message)
