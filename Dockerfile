@@ -6,7 +6,15 @@ RUN apt-get update && apt-get install -y \
     libreoffice-calc \
     libreoffice-impress \
     fonts-dejavu \
-    locales \
+    libxinerama1 \
+    libglu1-mesa \
+    libgtk-3-0 \
+    libxrender1 \
+    libsm6 \
+    libice6 \
+    libxext6 \
+    libgl1 \
+    libdbus-glib-1-2 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
